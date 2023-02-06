@@ -21,18 +21,21 @@ async function fetchDataAndRender() {
   try {
     const response = await fetch("https://rickandmortyapi.com/api/character");
     const data = await response.json();
+    // console.log(data);
     const results = data.results;
-    console.log(results);
-    if (response.ok) {
-      results.forEach((character) => {
-        console.log(character);
-        // const newCards = Card(character);
-        // renderElement(newCards);
-        let characterArr = [results];
-        console.log(characterArr);
-      });
+    // console.log(results);
 
-      // return data;
+    if (response.ok) {
+      let charArray = results.map((result) => {
+        return {
+          image: result.image,
+          name: result.name,
+          status: result.status,
+          type: result.type,
+          occurences: result.episode.length,
+        };
+      });
+      console.log(charArray);
     } else {
       console.error("Bad Response");
     }
