@@ -16,15 +16,11 @@ let searchQuery = "";
 
 fetchDataAndRender();
 
-// --v-- your code below this line --v--
-
 async function fetchDataAndRender() {
   try {
     const response = await fetch("https://rickandmortyapi.com/api/character");
     const data = await response.json();
-    // console.log(data);
     const results = data.results;
-    // console.log(results);
 
     if (response.ok) {
       let charArray = results.map((result) => {
@@ -36,11 +32,14 @@ async function fetchDataAndRender() {
           occurences: result.episode.length,
         };
       });
-      console.log(charArray);
+      charArray.forEach((character) => {
+        const newCard = createCharacterCard(character);
+        cardContainer.append(newCard);
+      });
     } else {
       console.error("Bad Response");
     }
   } catch (error) {
-    console.error("An Error occurred");
+    console.error("An Error occurred", error);
   }
 }
