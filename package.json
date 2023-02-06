@@ -9,5 +9,8 @@
   },
   "nf": {
     "template": "html-css-js-static"
+  },
+  "dependencies": {
+    "rickmortyapi": "^2.3.0"
   }
 }
