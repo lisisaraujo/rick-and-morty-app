@@ -15,21 +15,27 @@ let page = 1;
 let searchQuery = "";
 
 fetchDataAndRender();
+searchBar.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  searchQuery = Object.fromEntries(formData).query;
 
-// --v-- your code below this line --v--
+  if (!searchQuery) {
+    page = 1;
+  }
+  cardContainer.innerHTML = "";
+  fetchDataAndRender();
+});
 
 async function fetchDataAndRender() {
   try {
     cardContainer.innerHTML = "";
     let response = await fetch(
-      `https://rickandmortyapi.com/api/character/?page=${page}`
+      `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`
     );
     const data = await response.json();
-    console.log(data);
     maxPage = data.info.pages;
-    // console.log(maxPage);
     const results = data.results;
-    // console.log(results);
     pagination.textContent = `${page} / ${maxPage}`;
     if (response.ok) {
       let charArray = results.map((result) => {
