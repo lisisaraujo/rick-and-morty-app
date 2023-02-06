@@ -15,10 +15,19 @@ let page = 1;
 let searchQuery = "";
 
 fetchDataAndRender();
-
+searchBar.addEventListener("submit", (event) => {
+  event.preventDefault();
+  // console log input attribute
+  const formData = new FormData(event.target);
+  searchQuery = Object.fromEntries(formData).query;
+  cardContainer.innerHTML = "";
+  fetchDataAndRender();
+});
 async function fetchDataAndRender() {
   try {
-    const response = await fetch("https://rickandmortyapi.com/api/character");
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/character?name=${searchQuery}`
+    );
     const data = await response.json();
     const results = data.results;
 
