@@ -22,12 +22,9 @@ searchBar.addEventListener("submit", (event) => {
 
   if (!searchQuery) {
     page = 1;
-    cardContainer.innerHTML = "";
-    fetchDataAndRender();
-  } else {
-    cardContainer.innerHTML = "";
-    fetchDataAndRender();
   }
+  cardContainer.innerHTML = "";
+  fetchDataAndRender();
 });
 
 async function fetchDataAndRender() {
