@@ -1,4 +1,4 @@
-export function createButton(text, onClick) {
+export function CreateButton(text, onClick) {
   const button = document.createElement("button");
   button.classList.add("button");
   button.textContent = text;

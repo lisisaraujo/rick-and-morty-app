@@ -1,67 +1,19 @@
-import { createCharacterCard } from "./components/card/card.js";
-import { createSearchBar } from "./components/search-bar/search-bar.js";
-import { createNav } from "./components/nav/nav.js";
-import { createPagination } from "./components/nav-pagination/nav-pagination.js";
-import { createButton } from "./components/nav-button/nav-button.js";
+import { CreateCharacterCard } from "./components/card/card.js";
+import { CreateSearchBar } from "./components/search-bar/search-bar.js";
+import { CreateNav } from "./components/nav/nav.js";
+import { CreatePagination } from "./components/nav-pagination/nav-pagination.js";
+import { CreateButton } from "./components/nav-button/nav-button.js";
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
-/*const searchBarContainer = document.querySelector(
-  '[data-js="search-bar-container"]'
-);*/
 const main = document.querySelector("main");
-//const body = document.getElementsByTagName("body");
-//const searchBar = document.querySelector('[data-js="search-bar"]');
-//const prevButton = document.querySelector('[data-js="button-prev"]');
-//const nextButton = document.querySelector('[data-js="button-next"]');
-//const pagination = document.querySelector('[data-js="pagination"]');
+const body = document.querySelector("body");
 
 // States
 export let maxPage = 42;
 export let page = 1;
 export let searchQuery = "";
 
-const navBar = createNav();
-const pagination = createPagination(page, maxPage);
-const nextButton = createButton("Next", () => {
-  page++;
-  pagination.textContent = `${page} / ${maxPage}`;
-  if (page >= maxPage) {
-    page = maxPage;
-  }
-  if (page <= 0) {
-    page = 1;
-  }
-  fetchDataAndRender();
-});
-const prevButton = createButton("Prev", (event) => {
-  event.preventDefault();
-  page--;
-  pagination.textContent = `${page} / ${maxPage}`;
-  if (page >= maxPage) {
-    page = maxPage;
-  }
-  if (page <= 0) {
-    page = 1;
-  }
-  fetchDataAndRender();
-});
-const searchBar = createSearchBar((event) => {
-  const cardContainer = document.querySelector('[data-js="card-container"]');
-
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  searchQuery = Object.fromEntries(formData).query;
-
-  if (!searchQuery) {
-    page = 1;
-  }
-  cardContainer.innerHTML = "";
-  fetchDataAndRender();
-});
-navBar.append(prevButton, pagination, nextButton);
-document.body.appendChild(navBar);
-main.append(searchBar);
-fetchDataAndRender();
+// fetch function
 
 export async function fetchDataAndRender() {
   try {
@@ -71,7 +23,7 @@ export async function fetchDataAndRender() {
     );
     const data = await response.json();
     const results = data.results;
-
+    // pagination.textContent = `${page} / ${maxPage}`;
     if (response.ok) {
       let charArray = results.map((result) => {
         return {
@@ -82,9 +34,8 @@ export async function fetchDataAndRender() {
           occurences: result.episode.length,
         };
       });
-
       charArray.forEach((character) => {
-        const newCard = createCharacterCard(character);
+        const newCard = CreateCharacterCard(character);
         cardContainer.append(newCard);
       });
     } else {
@@ -94,3 +45,70 @@ export async function fetchDataAndRender() {
     console.error("An Error occurred", error);
   }
 }
+fetchDataAndRender();
+
+// create navbar
+const navBar = CreateNav();
+// create pagination
+const pagination = CreatePagination(page, maxPage);
+
+// next button
+const nextButton = CreateButton("Next", (event) => {
+  event.preventDefault();
+  page++;
+
+  if (page <= 1) {
+    page = 1;
+  }
+  if (page >= maxPage) {
+    page = maxPage;
+  }
+
+  pagination.textContent = `${page} / ${maxPage}`;
+  fetchDataAndRender();
+});
+
+// previous button
+const prevButton = CreateButton("Prev", (event) => {
+  event.preventDefault();
+  page--;
+
+  if (page <= 1) {
+    page = 1;
+  }
+  if (page >= maxPage) {
+    page = maxPage;
+  }
+  pagination.textContent = `${page} / ${maxPage}`; // for page to not exceed 42 and 1 the text content has to be set AFTER the condition is declared.
+  fetchDataAndRender();
+});
+
+// search bar
+
+// const searchBar = CreateSearchBar((event) => {
+//   event.preventDefault();
+//   const formData = new FormData(event.target);
+//   searchQuery = Object.fromEntries(formData).query;
+//   if (!searchQuery) {
+//     page = 1;
+//   }
+//   fetchDataAndRender();
+// });
+
+const searchBar = CreateSearchBar((event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  searchQuery = Object.fromEntries(formData).query;
+
+  if (!searchQuery) {
+    page = 1;
+  }
+  cardContainer.innerHTML = "";
+  fetchDataAndRender();
+});
+
+// appending everything
+
+navBar.append(prevButton, pagination, nextButton);
+body.append(navBar); // body needed to be selected with querySelector, not "getElementByTagName"
+main.prepend(searchBar);

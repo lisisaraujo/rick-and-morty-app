@@ -1,4 +1,4 @@
-export function createSearchBar(onSubmit) {
+export function CreateSearchBar(onSubmit) {
   const searchBar = document.createElement("div");
   searchBar.classList.add("search-bar-container");
   searchBar.setAttribute("data-js", "search-bar-container");
