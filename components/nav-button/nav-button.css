@@ -1,7 +1,9 @@
 .button {
-  background-color: var(--color-water-10);
+  background-color: rgba(128, 128, 128, 0.238);
+  /* background-color: var(--color-water-10); */
   border: none;
-  color: var(--color-granite);
+  /* color: var(--color-granite); */
+  color: whitesmoke;
   font-size: 1.2rem;
   transition: 0.3s ease;
 }
